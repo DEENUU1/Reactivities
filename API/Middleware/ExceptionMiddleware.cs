@@ -1,23 +1,23 @@
-﻿using Application.Core;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using Application.Core;
 
 namespace API.Middleware
 {
     public class ExceptionMiddleware
     {
-
-        private readonly IHostEnvironment _env;
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment env) 
+        private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IHostEnvironment _env;
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
+            IHostEnvironment env)
         {
             _env = env;
             _logger = logger;
             _next = next;
         }
 
-        private async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -40,6 +40,5 @@ namespace API.Middleware
                 await context.Response.WriteAsync(json);
             }
         }
-
     }
 }
