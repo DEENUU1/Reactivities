@@ -24,26 +24,24 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Category")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Venue")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -78,7 +76,6 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Bio")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -86,7 +83,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -139,6 +135,27 @@ namespace Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Photo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -288,6 +305,13 @@ namespace Persistence.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("Domain.Photo", b =>
+                {
+                    b.HasOne("Domain.AppUser", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -347,6 +371,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AppUser", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }
